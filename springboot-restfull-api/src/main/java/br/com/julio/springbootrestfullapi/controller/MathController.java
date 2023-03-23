@@ -2,7 +2,7 @@ package br.com.julio.springbootrestfullapi.controller;
 
 import br.com.julio.springbootrestfullapi.exception.UnsuportedMathOperationException;
 import br.com.julio.springbootrestfullapi.math.SimpleMath;
-import br.com.julio.springbootrestfullapi.request.converts.NumberConverter;
+import br.com.julio.springbootrestfullapi.util.NumberConverter;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -1,4 +1,4 @@
-package br.com.julio.springbootrestfullapi.request.converts;
+package br.com.julio.springbootrestfullapi.util;
 
 public class NumberConverter {
 
