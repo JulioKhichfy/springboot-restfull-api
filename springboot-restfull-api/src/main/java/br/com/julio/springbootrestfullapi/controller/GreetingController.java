@@ -1,5 +1,6 @@
-package br.com.julio.springbootrestfullapi;
+package br.com.julio.springbootrestfullapi.controller;
 
+import br.com.julio.springbootrestfullapi.model.Greeting;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
