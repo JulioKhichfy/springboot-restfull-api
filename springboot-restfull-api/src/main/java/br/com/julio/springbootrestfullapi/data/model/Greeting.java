@@ -1,4 +1,4 @@
-package br.com.julio.springbootrestfullapi.model;
+package br.com.julio.springbootrestfullapi.data.model;
 
 public class Greeting {
     private final long id;

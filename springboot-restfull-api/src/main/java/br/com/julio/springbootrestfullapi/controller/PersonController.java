@@ -1,6 +1,7 @@
 package br.com.julio.springbootrestfullapi.controller;
 
-import br.com.julio.springbootrestfullapi.model.Person;
+import br.com.julio.springbootrestfullapi.data.vo.PersonVO;
+import br.com.julio.springbootrestfullapi.data.vo.v2.PersonVOV2;
 import br.com.julio.springbootrestfullapi.services.PersonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,14 +19,14 @@ public class PersonController {
     
     @RequestMapping(method=RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Person> findAll() {
+    public List<PersonVO> findAll() {
         return service.findAll();
     }    
     
     @RequestMapping(value="/{id}",
             method=RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person findById(@PathVariable("id") Long id) {
+    public PersonVO findById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
 
@@ -39,7 +40,8 @@ public class PersonController {
     @RequestMapping(method=RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person create(@RequestBody Person person) {
+    public PersonVO create(@RequestBody PersonVO person) {
+
         return service.create(person);
     }
     /*
@@ -48,20 +50,22 @@ public class PersonController {
 		return service.create(person);
 	}
     */
-    
+
+    @PostMapping("/v2")
+    public PersonVOV2 createV2(@RequestBody PersonVOV2 person) {
+
+        return service.createV2(person);
+    }
+
+
     @RequestMapping(value="/{id}",
             method=RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person update(@PathVariable("id") Long id,
-                         @RequestBody Person person) {
-        Person personEntity = service.findById(id);
-        personEntity.setFirstName(person.getFirstName());
-        personEntity.setLastName(person.getLastName());
-        personEntity.setAddress(person.getAddress());
-        personEntity.setGender(person.getGender());
-
-        return service.update(personEntity);
+    public PersonVO update(@PathVariable("id") Long id,
+                           @RequestBody PersonVO person) {
+        PersonVO vo = service.findById(id);
+        return service.update(vo);
     }
     /*
     @PutMapping
