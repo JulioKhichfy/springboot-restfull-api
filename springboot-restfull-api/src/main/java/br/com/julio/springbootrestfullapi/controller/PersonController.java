@@ -18,14 +18,14 @@ public class PersonController {
     private PersonServices service;
     
     @RequestMapping(method=RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<PersonVO> findAll() {
         return service.findAll();
     }    
     
     @RequestMapping(value="/{id}",
             method=RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public PersonVO findById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
@@ -38,8 +38,8 @@ public class PersonController {
     */
 
     @RequestMapping(method=RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public PersonVO create(@RequestBody PersonVO person) {
 
         return service.create(person);
@@ -51,7 +51,9 @@ public class PersonController {
 	}
     */
 
-    @PostMapping("/v2")
+    @PostMapping(value = "/v2",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public PersonVOV2 createV2(@RequestBody PersonVOV2 person) {
 
         return service.createV2(person);
@@ -60,8 +62,8 @@ public class PersonController {
 
     @RequestMapping(value="/{id}",
             method=RequestMethod.PUT,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public PersonVO update(@PathVariable("id") Long id,
                            @RequestBody PersonVO person) {
         PersonVO vo = service.findById(id);
