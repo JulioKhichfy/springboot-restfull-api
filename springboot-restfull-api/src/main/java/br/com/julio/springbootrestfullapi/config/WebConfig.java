@@ -14,14 +14,20 @@ public class WebConfig implements WebMvcConfigurer {
         //VIA EXTENSION: localhost>8080/api/person/v1.xml DEPRECATED
 
         // VIA QUERY PARAM: localhost>8080/api/person/v1?mediaType=xml
-
-        configurer.favorParameter(true) // aceita parametros
+        /*configurer.favorParameter(true) // aceita parametros
                 .parameterName("mediaType").ignoreAcceptHeader(true)
                 .useRegisteredExtensionsOnly(false)
                 .defaultContentType(MediaType.APPLICATION_JSON)
                 .mediaType("json", MediaType.APPLICATION_JSON)
-                .mediaType("XML", MediaType.APPLICATION_XML);
+                .mediaType("XML", MediaType.APPLICATION_XML);*/
 
+        // VIA HEADER: localhost>8080/api/person/v1
+        configurer.favorParameter(false) // nao aceita parametros
+                .ignoreAcceptHeader(false)
+                .useRegisteredExtensionsOnly(false)
+                .defaultContentType(MediaType.APPLICATION_JSON)
+                .mediaType("json", MediaType.APPLICATION_JSON)
+                .mediaType("XML", MediaType.APPLICATION_XML);
 
     }
 }
