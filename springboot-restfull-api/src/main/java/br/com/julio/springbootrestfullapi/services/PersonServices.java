@@ -1,19 +1,23 @@
 package br.com.julio.springbootrestfullapi.services;
 
 
+import br.com.julio.springbootrestfullapi.controller.PersonController;
 import br.com.julio.springbootrestfullapi.converter.DozerConverter;
 import br.com.julio.springbootrestfullapi.converter.custom.PersonConverter;
 import br.com.julio.springbootrestfullapi.data.model.Person;
 import br.com.julio.springbootrestfullapi.data.vo.PersonVO;
 import br.com.julio.springbootrestfullapi.data.vo.v2.PersonVOV2;
+import br.com.julio.springbootrestfullapi.exception.RequiredObjectIsNullException;
 import br.com.julio.springbootrestfullapi.exception.ResourceNotFoundException;
 import br.com.julio.springbootrestfullapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.logging.Logger;
-
 
 import java.util.List;
+import java.util.logging.Logger;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class PersonServices {
@@ -28,8 +32,10 @@ public class PersonServices {
 
     public PersonVO create(PersonVO person) {
         logger.info("create");
+        if (person == null) throw new RequiredObjectIsNullException();
         Person entity = DozerConverter.parseObject(person, Person.class);
         PersonVO vo = DozerConverter.parseObject(repository.save(entity), PersonVO.class);
+        vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
         return vo;
     }
 
@@ -41,7 +47,14 @@ public class PersonServices {
     }
 
     public List<PersonVO> findAll() {
-        return DozerConverter.parseListObjects(repository.findAll(), PersonVO.class);
+        List<PersonVO> vos = DozerConverter.parseListObjects(repository.findAll(), PersonVO.class);
+        vos
+                .stream()
+                .forEach(p -> p.add(
+                                linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()
+                        )
+                );
+        return vos;
     }
 
     public PersonVO findById(Long id) {
@@ -50,18 +63,23 @@ public class PersonServices {
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
         PersonVO vo = DozerConverter.parseObject(personEntity, PersonVO.class);
+        vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
         return vo;
     }
 
     public PersonVO update(PersonVO person) {
-        Person entity = repository.findById(person.getId())
+        if (person == null) throw new RequiredObjectIsNullException();
+        var entity = repository.findById(person.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
         entity.setFirstName(person.getFirstName());
         entity.setLastName(person.getLastName());
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
+
         var vo = DozerConverter.parseObject(repository.save(entity), PersonVO.class);
+        vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
+
         return vo;
     }
 

@@ -1,7 +1,11 @@
 package br.com.julio.springbootrestfullapi.controller;
 
+//import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
+//import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import br.com.julio.springbootrestfullapi.data.vo.PersonVO;
 import br.com.julio.springbootrestfullapi.data.vo.v2.PersonVOV2;
+import br.com.julio.springbootrestfullapi.repository.PersonRepository;
 import br.com.julio.springbootrestfullapi.services.PersonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,6 +20,9 @@ public class PersonController {
     
     @Autowired
     private PersonServices service;
+
+    @Autowired
+    PersonRepository repository;
     
     @RequestMapping(method=RequestMethod.GET,
             produces = {
@@ -23,7 +30,9 @@ public class PersonController {
                     MediaType.APPLICATION_XML_VALUE,
                     "application/x-yaml"})
     public List<PersonVO> findAll() {
-        return service.findAll();
+        List<PersonVO> persons =  service.findAll();
+
+        return persons;
     }    
     
     @RequestMapping(value="/{id}",
@@ -33,7 +42,9 @@ public class PersonController {
                     MediaType.APPLICATION_XML_VALUE,
                     "application/x-yaml"})
     public PersonVO findById(@PathVariable("id") Long id) {
-        return service.findById(id);
+        PersonVO vo = service.findById(id);
+
+        return vo;
     }
 
     /*
@@ -54,7 +65,9 @@ public class PersonController {
                     "application/x-yaml"})
     public PersonVO create(@RequestBody PersonVO person) {
 
-        return service.create(person);
+        PersonVO vo = service.create(person);
+
+        return vo;
     }
     /*
     @PostMapping
@@ -75,10 +88,11 @@ public class PersonController {
     public PersonVOV2 createV2(@RequestBody PersonVOV2 person) {
 
         return service.createV2(person);
+
     }
 
 
-    @RequestMapping(value="/{id}",
+    @RequestMapping(
             method=RequestMethod.PUT,
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
@@ -88,10 +102,10 @@ public class PersonController {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE,
                     "application/x-yaml"})
-    public PersonVO update(@PathVariable("id") Long id,
-                           @RequestBody PersonVO person) {
-        PersonVO vo = service.findById(id);
-        return service.update(vo);
+    public PersonVO update( @RequestBody PersonVO person) {
+        PersonVO personVO = service.update(person);
+
+        return personVO;
     }
     /*
     @PutMapping

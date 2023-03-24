@@ -1,6 +1,7 @@
 package br.com.julio.springbootrestfullapi.exception.handler;
 
 import br.com.julio.springbootrestfullapi.exception.ExceptionResponse;
+import br.com.julio.springbootrestfullapi.exception.RequiredObjectIsNullException;
 import br.com.julio.springbootrestfullapi.exception.ResourceNotFoundException;
 import br.com.julio.springbootrestfullapi.exception.UnsuportedMathOperationException;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,18 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
                         ex.getMessage(),
                         request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RequiredObjectIsNullException.class)
+    public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions2(
+            Exception ex, WebRequest request) {
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
